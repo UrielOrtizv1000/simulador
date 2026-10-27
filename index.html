@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   index.html
-  Punto de entrada del Simulador de Bases de Datos. Solo contiene el esqueleto de las tres
+  Punto de entrada del simulador de exámenes universitarios. Solo contiene el esqueleto de las tres
   pantallas (inicio, examen, resultados); todo el contenido se llena por JavaScript.
   Carga primero preguntas.js (datos) y luego app.js (lógica), en ese orden.
 -->
@@ -9,8 +9,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simulador de Bases de Datos</title>
+  <title>Simulador universitario · Bases de Datos Distribuidas</title>
 
+  <link rel="icon" href="data:,">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -23,14 +24,14 @@
   <!-- Pantalla de inicio: presentación, temas y botón para comenzar -->
   <section id="screen-start">
     <div class="hero">
-      <div class="eyebrow">Bases de Datos</div>
-      <h1>Simulador de Bases de Datos</h1>
-      <p class="lead">Examen de práctica con retroalimentación inmediata en cada pregunta. Cubre modelo relacional, SQL (DDL, DML, JOIN, programación) y bases de datos distribuidas, y al final puedes reintentar solo lo que hayas fallado hasta dominarlo.</p>
+      <div class="eyebrow">Ingeniería de Datos</div>
+      <h1>Bases de Datos Distribuidas</h1>
+      <p class="lead">Examen universitario de estudio personal sobre diseño distribuido, fragmentación, asignación, replicación, recuperación y observabilidad. Las preguntas son teóricas y usan únicamente el material de la edición actual.</p>
 
       <div class="fact-row">
         <div class="fact"><div class="num">72</div><div class="lbl">preguntas</div></div>
         <div class="fact"><div class="num">90:00</div><div class="lbl">minutos</div></div>
-        <div class="fact"><div class="num">9</div><div class="lbl">temas</div></div>
+        <div class="fact"><div class="num">6</div><div class="lbl">temas</div></div>
       </div>
 
       <div class="topics" id="topic-chips"></div>
@@ -108,7 +109,7 @@
     </div>
   </section>
 
-  <footer class="appfoot">Simulador de práctica · Bases de Datos</footer>
+  <footer class="appfoot">Simulador de práctica · Ingeniería de Datos</footer>
 </div>
 
 <script src="js/preguntas.js"></script>

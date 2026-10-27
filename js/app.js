@@ -1,6 +1,6 @@
 /*
   app.js
-  Motor del Simulador de Seguridad: arma cada intento (mezclando preguntas y opciones),
+  Motor del simulador de exámenes universitarios: arma cada intento (mezclando preguntas y opciones),
   dibuja la pregunta según su tipo, califica, controla el temporizador y las tres
   pantallas (inicio / examen / resultados), y maneja el reintento de preguntas falladas.
 

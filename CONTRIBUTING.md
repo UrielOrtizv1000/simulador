@@ -1,7 +1,7 @@
 # Contributing
 
 All the exam content lives in `js/preguntas.js`, in two pieces: `TOPICS` describes
-the seven themes, and `QUESTION_BANK` holds the questions. The engine in
+the active exam topics, and `QUESTION_BANK` holds the questions. The engine in
 `js/app.js` reads both at runtime, so adding, editing or removing a question of an
 existing type needs no change to the logic at all.
 
@@ -17,7 +17,9 @@ existing type needs no change to the logic at all.
    the others if you add one.
 3. Keep the answer inside the question. A distractor is fine; a second correct
    option is not, and neither is a `connect` pair whose two halves do not match.
-4. Reload `index.html` and walk the question once, both answering it right and
+4. Add a `source` object with the exact source filename and section. Do not add
+   material that is absent from the selected course sources.
+5. Reload `index.html` and walk the question once, both answering it right and
    answering it wrong: the feedback, the locked state and the topic breakdown are
    the parts a bad edit breaks.
 
