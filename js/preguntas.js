@@ -995,14 +995,14 @@ var QUESTION_BANK = [
       },
       {
         "l": "Secundario casi al día durante la operación normal",
-        "r": "Sincronización incremental o continua."
+        "r": "Sincronización continua."
       },
       {
         "l": "Nodo que regresa después de una caída breve",
-        "r": "Sincronización incremental o continua."
+        "r": "Sincronización continua."
       }
     ],
-    "explain": "La sincronización inicial copia todo el estado; la incremental aplica únicamente operaciones recientes.",
+    "explain": "La sincronización inicial copia todo el estado; la continua lee la bitácora y aplica únicamente los cambios nuevos.",
     "source": {
       "file": "5. fallos_y_recuperacion.md",
       "section": "Dos formas de sincronizar"
