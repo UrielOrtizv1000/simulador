@@ -6,20 +6,25 @@ The project is a static web application built with HTML, CSS, and JavaScript. It
 
 ## Current exam
 
-The current edition is a theoretical exam for **Data Engineering**, focused on **Distributed Databases**.
+The current edition is a practical and conceptual exam for **Programming in Python**, focused on Units III and IV.
 
-It contains **72 questions across six topics**:
+It contains **66 questions across eleven topics**:
 
-1. Distributed database design
-2. Data fragmentation
-3. Fragment allocation and distribution
-4. Data replication
-5. Failures and recovery
-6. Operations and observability
+1. Advanced list operations
+2. List comprehensions
+3. Tuples, records, and unpacking
+4. Safe dictionary manipulation
+5. Set operations
+6. Plain-text files
+7. Context managers and `with`
+8. JSON and CSV
+9. `map()` and `filter()` over data
+10. Classes, `self`, and `__init__`
+11. Instance and class attributes
 
-The bank is based exclusively on the six presentations and their Markdown transcriptions supplied for this study session. It does not include topics from previous editions or information added from external sources.
+The bank is based exclusively on the eleven Jupyter notebooks supplied for this study session. It does not include topics from previous editions or information added from external sources.
 
-Most questions are theoretical. Some use short scenarios, calculations, tables, or examples from the source material. Questions about queries show a query and ask the student to identify its type or access pattern; they do not ask the student to write code.
+The questions prioritize the exercises and assignments at the end of each notebook. They use short, isolated code examples to test what a program prints, which operation is appropriate, and how a specific task should be implemented without mixing unrelated topics.
 
 > The active subject changes over time. This README describes the simulator as a reusable project and documents the exam currently loaded in `js/preguntas.js`.
 
