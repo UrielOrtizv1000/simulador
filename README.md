@@ -6,25 +6,26 @@ The project is a static web application built with HTML, CSS, and JavaScript. It
 
 ## Current exam
 
-The current edition is a practical and conceptual exam for **Programming in Python**, focused on Units III and IV.
+The current edition is a practical and conceptual exam for **Network Security**, focused on the second partial exam.
 
-It contains **66 questions across eleven topics**:
+It contains **60 questions across twelve topics**:
 
-1. Advanced list operations
-2. List comprehensions
-3. Tuples, records, and unpacking
-4. Safe dictionary manipulation
-5. Set operations
-6. Plain-text files
-7. Context managers and `with`
-8. JSON and CSV
-9. `map()` and `filter()` over data
-10. Classes, `self`, and `__init__`
-11. Instance and class attributes
+1. Network security, CIA, and defense in depth
+2. Secure channels, protocols, and OSI layers
+3. IPv4, IPv6, TCP, and UDP
+4. Tunnels, encapsulation, and VPNs
+5. IPsec, ESP, AH, and operating modes
+6. TLS, HTTPS, and SSH
+7. Kerberos, certificates, and certificate authorities
+8. Steganography and steganalysis
+9. Cryptography, cryptanalysis, and communication attacks
+10. Symmetric, asymmetric, and hybrid encryption
+11. Block encryption, stream encryption, and XOR
+12. Hashes, validation, and electronic signatures
 
-The bank is based exclusively on the eleven Jupyter notebooks supplied for this study session. It does not include topics from previous editions or information added from external sources.
+The bank is based exclusively on `seguridadredes.md`. It does not include topics from previous editions or information added from external sources.
 
-The questions prioritize the exercises and assignments at the end of each notebook. They use short, isolated code examples to test what a program prints, which operation is appropriate, and how a specific task should be implemented without mixing unrelated topics.
+The questions combine concepts, real-world scenarios, matching activities, diagram completion, model-answer prompts, and grouped exercises.
 
 > The active subject changes over time. This README describes the simulator as a reusable project and documents the exam currently loaded in `js/preguntas.js`.
 
@@ -32,7 +33,9 @@ The questions prioritize the exercises and assignments at the end of each notebo
 
 - Multiple choice
 - True or false
+- Grouped true or false with eight statements
 - Fill in the blank
+- Grouped fill in the blank with eight phrases and a word bank
 - Matching with dropdown lists
 - Connecting related concepts
 - Diagram completion
@@ -91,7 +94,7 @@ Each question must have:
 - feedback explaining the answer;
 - a `source` object identifying the source file and section.
 
-Supported types are `mc`, `vf`, `fill`, `match`, `connect`, `diagram`, and `open`.
+Supported types are `mc`, `vf`, `vf_group`, `fill`, `fill_group`, `match`, `connect`, `diagram`, and `open`.
 
 When changing subjects:
 

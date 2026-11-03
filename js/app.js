@@ -36,6 +36,9 @@ function stripAccents(s){
 function normalize(s){
   return stripAccents((s||'').toString()).trim().replace(/[^\w\s]/g,'').replace(/\s+/g,' ');
 }
+function hasSelection(ans, index){
+  return !!ans.selections && Object.prototype.hasOwnProperty.call(ans.selections, index);
+}
 // Helper para crear elementos DOM sin escribir HTML a mano (evita fugas de XSS con texto de usuario).
 function el(tag, props, children){
   var e = document.createElement(tag);
@@ -76,6 +79,8 @@ function buildRuntimeFor(q){
     rq.runtimePool = shuffle(rq.pairs.map(function(p){return p.r;}));
   } else if(rq.type==='diagram'){
     rq.runtimePool = shuffle(rq.pool);
+  } else if(rq.type==='fill_group'){
+    rq.runtimePool = shuffle(rq.wordBank);
   }
   return rq;
 }
@@ -90,6 +95,18 @@ function questionScore(q, ans){
     var norm = normalize(ans.text||'');
     var ok = q.answers.some(function(a){return normalize(a)===norm;});
     return {score: ok?1:0, status: ok?'correct':'incorrect'};
+  }
+  if(q.type==='vf_group'){
+    var correctVF=0;
+    q.statements.forEach(function(item,i){ if(hasSelection(ans,i) && ans.selections[i]===item.answer) correctVF++; });
+    var fracVF = q.statements.length ? correctVF/q.statements.length : 0;
+    return {score:fracVF, status:fracVF===1?'correct':(fracVF>0?'partial':'incorrect')};
+  }
+  if(q.type==='fill_group'){
+    var correctFill=0;
+    q.items.forEach(function(item,i){ if(ans.selections && ans.selections[i]===item.answer) correctFill++; });
+    var fracFill = q.items.length ? correctFill/q.items.length : 0;
+    return {score:fracFill, status:fracFill===1?'correct':(fracFill>0?'partial':'incorrect')};
   }
   if(q.type==='match' || q.type==='diagram' || q.type==='connect'){
     var slots = q.type==='diagram' ? q.slots : q.runtimePairs;
@@ -237,7 +254,7 @@ function renderQuestion(){
   card.classList.add('rise-in');
 
   var t = topicOf(q.topic);
-  var typeLabels = {mc:'Opción múltiple', vf:'Verdadero / Falso', fill:'Completar', match:'Relacionar', open:'Pregunta abierta', diagram:'Diagrama', connect:'Conectar'};
+  var typeLabels = {mc:'Opción múltiple', vf:'Verdadero / Falso', vf_group:'Verdadero / Falso · 8 incisos', fill:'Completar', fill_group:'Completar · 8 incisos', match:'Relacionar', open:'Pregunta abierta', diagram:'Diagrama', connect:'Conectar'};
 
   card.appendChild(el('div',{class:'qmeta'},[
     el('span',{class:'qtag', style:'background:color-mix(in srgb, var('+t.color+') 18%, transparent); color:var('+t.color+')', text:t.short}),
@@ -277,6 +294,59 @@ function renderQuestion(){
     }
   }
 
+  // ---- VERDADERO / FALSO AGRUPADO ----
+  else if(q.type==='vf_group'){
+    if(!ans.selections) ans.selections = {};
+    var checkBtnVG = el('button',{class:'check-btn', text:'Comprobar las 8 afirmaciones'});
+    function vfGroupComplete(){ return q.statements.every(function(item,i){ return hasSelection(ans,i); }); }
+
+    q.statements.forEach(function(item,i){
+      var chosen = ans.selections[i];
+      var itemCorrect = ans.checked && chosen===item.answer;
+      var row = el('div',{class:'group-row vf-group-row'+(ans.checked?(itemCorrect?' row-correct':' row-incorrect'):'')});
+      row.appendChild(el('div',{class:'group-statement'},[
+        el('span',{class:'group-number', text:String(i+1)}),
+        el('span',{text:item.text})
+      ]));
+      var controls = el('div',{class:'vf-group-controls', role:'radiogroup', 'aria-label':'Afirmación '+String(i+1)});
+      [{label:'Verdadero',value:true},{label:'Falso',value:false}].forEach(function(option){
+        var selected = hasSelection(ans,i) && chosen===option.value;
+        var cls='vf-group-choice'+(selected?' selected':'');
+        if(ans.checked){
+          cls+=' locked';
+          if(option.value===item.answer) cls+=' correct-answer';
+          else if(selected) cls+=' wrong-answer';
+        }
+        var btn=el('button',{class:cls, text:option.label, role:'radio', 'aria-checked':String(selected)});
+        btn.disabled=!!ans.checked;
+        if(!ans.checked){
+          btn.addEventListener('click',function(){ ans.selections[i]=option.value; renderQuestion(); renderPalette(); });
+        }
+        controls.appendChild(btn);
+      });
+      row.appendChild(controls);
+      if(ans.checked){
+        row.appendChild(el('div',{class:'group-item-feedback '+(itemCorrect?'ok':'bad'), text:(itemCorrect?'✓ ':'✗ Correcta: '+(item.answer?'Verdadero':'Falso')+'. ')+item.explain}));
+      }
+      body.appendChild(row);
+    });
+
+    if(!ans.checked){
+      checkBtnVG.disabled=!vfGroupComplete();
+      checkBtnVG.addEventListener('click',function(){ if(vfGroupComplete()){ ans.checked=true; renderQuestion(); renderPalette(); } });
+      footer.appendChild(checkBtnVG);
+    } else {
+      var resultVG=questionScore(q,ans);
+      var correctVG=Math.round(resultVG.score*q.statements.length);
+      footer.appendChild(el('div',{class:'feedback-panel '+resultVG.status},[
+        el('div',{class:'fb-title', text:feedbackTitle(resultVG.status)}),
+        el('div',{class:'fb-explain', text:'Acertaste '+correctVG+' de '+q.statements.length+' afirmaciones.'}),
+        el('div',{class:'fb-explain', text:q.explain})
+      ]));
+      footer.appendChild(el('button',{class:'next-btn', text: state.index===state.order.length-1 ? (state.mode==='retry'?'Terminar reintento':'Finalizar examen') : 'Siguiente →', onclick:goNext}));
+    }
+  }
+
   // ---- FILL ----
   else if(q.type==='fill'){
     var row = el('div',{class:'fill-row'});
@@ -304,6 +374,58 @@ function renderQuestion(){
       if(stf!=='correct') fb.appendChild(el('div',{class:'fb-explain'},[ el('b',{text:'Respuesta correcta: '}), document.createTextNode(q.answers[0]) ]));
       fb.appendChild(el('div',{class:'fb-explain', text:q.explain}));
       footer.appendChild(fb);
+      footer.appendChild(el('button',{class:'next-btn', text: state.index===state.order.length-1 ? (state.mode==='retry'?'Terminar reintento':'Finalizar examen') : 'Siguiente →', onclick:goNext}));
+    }
+  }
+
+  // ---- COMPLETAR AGRUPADO ----
+  else if(q.type==='fill_group'){
+    if(!ans.selections) ans.selections = {};
+    var bank=el('div',{class:'fill-group-bank', 'aria-label':'Banco de palabras'},[
+      el('div',{class:'fill-group-bank-title', text:'Banco de palabras'})
+    ]);
+    q.runtimePool.forEach(function(term){ bank.appendChild(el('span',{class:'fill-group-term', text:term})); });
+    body.appendChild(bank);
+
+    var checkBtnFG=el('button',{class:'check-btn', text:'Comprobar las 8 frases'});
+    function fillGroupComplete(){ return q.items.every(function(item,i){ return typeof ans.selections[i]==='string' && ans.selections[i]!==''; }); }
+
+    q.items.forEach(function(item,i){
+      var parts=item.text.split('___');
+      var chosen=ans.selections[i]||'';
+      var itemCorrect=ans.checked && chosen===item.answer;
+      var row=el('div',{class:'group-row fill-group-row'+(ans.checked?(itemCorrect?' row-correct':' row-incorrect'):'')});
+      var sentence=el('label',{class:'fill-group-sentence', for:'fill-group-'+q.id+'-'+i});
+      sentence.appendChild(el('span',{class:'group-number', text:String(i+1)}));
+      sentence.appendChild(document.createTextNode(parts[0]));
+      var sel=el('select',{class:'fill-group-select', id:'fill-group-'+q.id+'-'+i});
+      sel.appendChild(el('option',{value:'', text:'Selecciona...'}));
+      q.runtimePool.forEach(function(term){ var opt=el('option',{value:term,text:term}); if(chosen===term) opt.selected=true; sel.appendChild(opt); });
+      sel.disabled=!!ans.checked;
+      if(!ans.checked){
+        sel.addEventListener('change',function(){ ans.selections[i]=sel.value||''; checkBtnFG.disabled=!fillGroupComplete(); renderPalette(); });
+      }
+      sentence.appendChild(sel);
+      sentence.appendChild(document.createTextNode(parts[1]||''));
+      row.appendChild(sentence);
+      if(ans.checked){
+        row.appendChild(el('div',{class:'group-item-feedback '+(itemCorrect?'ok':'bad'), text:itemCorrect?'✓ Correcto':'✗ Respuesta correcta: '+item.answer}));
+      }
+      body.appendChild(row);
+    });
+
+    if(!ans.checked){
+      checkBtnFG.disabled=!fillGroupComplete();
+      checkBtnFG.addEventListener('click',function(){ if(fillGroupComplete()){ ans.checked=true; renderQuestion(); renderPalette(); } });
+      footer.appendChild(checkBtnFG);
+    } else {
+      var resultFG=questionScore(q,ans);
+      var correctFG=Math.round(resultFG.score*q.items.length);
+      footer.appendChild(el('div',{class:'feedback-panel '+resultFG.status},[
+        el('div',{class:'fb-title', text:feedbackTitle(resultFG.status)}),
+        el('div',{class:'fb-explain', text:'Acertaste '+correctFG+' de '+q.items.length+' frases.'}),
+        el('div',{class:'fb-explain', text:q.explain})
+      ]));
       footer.appendChild(el('button',{class:'next-btn', text: state.index===state.order.length-1 ? (state.mode==='retry'?'Terminar reintento':'Finalizar examen') : 'Siguiente →', onclick:goNext}));
     }
   }
@@ -698,6 +820,29 @@ function renderReview(){
         box.appendChild(line);
       });
       card.appendChild(box);
+    } else if(q.type==='vf_group'){
+      var vfBox=el('div',{class:'ranswer'});
+      q.statements.forEach(function(item,i){
+        var answered=ans.checked && hasSelection(ans,i);
+        var chosen=answered?ans.selections[i]:null;
+        var ok=answered && chosen===item.answer;
+        vfBox.appendChild(el('div',{class:'review-group-line'},[
+          el('b',{text:String(i+1)+'. '+item.text}), el('br'),
+          document.createTextNode('Tu respuesta: '+(answered?(chosen?'Verdadero':'Falso'):'(sin responder)')+(ok?' ✓':' — correcta: '+(item.answer?'Verdadero':'Falso')))
+        ]));
+      });
+      card.appendChild(vfBox);
+    } else if(q.type==='fill_group'){
+      var fillBox=el('div',{class:'ranswer'});
+      q.items.forEach(function(item,i){
+        var chosen=ans.checked && ans.selections?ans.selections[i]:null;
+        var ok=chosen===item.answer;
+        fillBox.appendChild(el('div',{class:'review-group-line'},[
+          el('b',{text:String(i+1)+'. '+item.text}), el('br'),
+          document.createTextNode('Tu respuesta: '+(chosen||'(sin responder)')+(ok?' ✓':' — correcta: '+item.answer))
+        ]));
+      });
+      card.appendChild(fillBox);
     } else if(q.type==='open'){
       card.appendChild(el('div',{class:'ranswer'},[
         document.createTextNode('Tu respuesta:'), el('br'),
