@@ -305,7 +305,6 @@ function renderQuestion(){
       var itemCorrect = ans.checked && chosen===item.answer;
       var row = el('div',{class:'group-row vf-group-row'+(ans.checked?(itemCorrect?' row-correct':' row-incorrect'):'')});
       row.appendChild(el('div',{class:'group-statement'},[
-        el('span',{class:'group-number', text:String(i+1)}),
         el('span',{text:item.text})
       ]));
       var controls = el('div',{class:'vf-group-controls', role:'radiogroup', 'aria-label':'Afirmación '+String(i+1)});
@@ -827,7 +826,7 @@ function renderReview(){
         var chosen=answered?ans.selections[i]:null;
         var ok=answered && chosen===item.answer;
         vfBox.appendChild(el('div',{class:'review-group-line'},[
-          el('b',{text:String(i+1)+'. '+item.text}), el('br'),
+          el('b',{text:item.text}), el('br'),
           document.createTextNode('Tu respuesta: '+(answered?(chosen?'Verdadero':'Falso'):'(sin responder)')+(ok?' ✓':' — correcta: '+(item.answer?'Verdadero':'Falso')))
         ]));
       });
