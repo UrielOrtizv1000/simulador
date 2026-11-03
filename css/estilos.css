@@ -110,7 +110,7 @@ button:focus-visible, select:focus-visible, textarea:focus-visible, input:focus-
 
 /* Hover solo para punteros finos (mouse/trackpad): evita estados "pegados" al tocar en celular. */
 @media (hover:hover) and (pointer:fine){
-  .opt-btn:not(.locked):hover, .conn-btn:not(.locked):hover, .sg-btn:not(.locked):hover{border-color:var(--accent-2);}
+  .opt-btn:not(.locked):hover, .conn-btn:not(.locked):hover, .sg-btn:not(.locked):hover, .vf-group-choice:not(.locked):hover{border-color:var(--accent-2);}
   .navbtn:not(:disabled):hover, .toolbtn:hover, .finish-btn-top:hover, .palette-toggle:hover, .pnum:hover{
     border-color:var(--accent-2); color:var(--ink);
   }
@@ -193,6 +193,36 @@ button:focus-visible, select:focus-visible, textarea:focus-visible, input:focus-
 .fill-input.correct-answer{border-color:var(--success);}
 .fill-input.wrong-answer{border-color:var(--danger);}
 .fill-hint{font-size:12px; color:var(--ink-muted);}
+
+/* Bloques de ocho incisos: verdadero/falso y completar con banco de palabras. */
+.group-row{border:1px solid var(--border); background:var(--surface-2); border-radius:14px; padding:12px;}
+.group-row.row-correct{border-color:var(--success); background:color-mix(in srgb, var(--success-soft) 72%, var(--surface-2));}
+.group-row.row-incorrect{border-color:var(--danger); background:color-mix(in srgb, var(--danger-soft) 72%, var(--surface-2));}
+.group-statement{display:flex; gap:9px; align-items:flex-start; font-size:13.5px; line-height:1.45;}
+.group-number{width:24px; height:24px; flex:none; display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--border); border-radius:7px; background:var(--surface); color:var(--ink-muted); font-family:'Geist Mono',ui-monospace,monospace; font-size:11px; font-weight:700;}
+.vf-group-row{display:grid; grid-template-columns:minmax(0,1fr) auto; gap:12px; align-items:center;}
+.vf-group-controls{display:flex; gap:7px;}
+.vf-group-choice{min-width:92px; border:1px solid var(--border); border-radius:999px; padding:8px 11px; background:var(--surface); color:var(--ink); font-size:12px; font-weight:600;}
+.vf-group-choice.selected{border-color:var(--accent); background:var(--accent-soft); color:var(--accent);}
+.vf-group-choice.correct-answer{border-color:var(--success); background:var(--success-soft); color:var(--success);}
+.vf-group-choice.wrong-answer{border-color:var(--danger); background:var(--danger-soft); color:var(--danger);}
+.vf-group-choice.locked{cursor:default;}
+.fill-group-bank{display:flex; flex-wrap:wrap; gap:7px; padding:11px 12px; border:1px dashed var(--accent); border-radius:14px; background:var(--accent-soft);}
+.fill-group-bank-title{width:100%; color:var(--ink-muted); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em;}
+.fill-group-term{border:1px solid var(--border); border-radius:999px; padding:5px 9px; background:var(--surface); color:var(--ink); font-family:'Geist Mono',ui-monospace,monospace; font-size:12px;}
+.fill-group-sentence{display:flex; flex-wrap:wrap; align-items:center; gap:7px; font-size:13.5px; line-height:1.5;}
+.fill-group-select{min-width:145px; max-width:100%; border:1.5px solid var(--border); border-radius:9px; padding:8px 9px; background:var(--surface); color:var(--ink); font-size:13px;}
+.fill-group-select:disabled{opacity:.9;}
+.group-item-feedback{grid-column:1/-1; margin-top:8px; padding-top:8px; border-top:1px dashed var(--border); font-size:12px; line-height:1.45;}
+.group-item-feedback.ok{color:var(--success);}
+.group-item-feedback.bad{color:var(--danger);}
+.review-group-line{padding-block:6px; border-bottom:1px dashed var(--border);}
+.review-group-line:last-child{border-bottom:none;}
+@media (max-width:620px){
+  .vf-group-row{grid-template-columns:1fr;}
+  .vf-group-controls{width:100%;}
+  .vf-group-choice{flex:1; min-width:0;}
+}
 
 .match-row{display:grid; grid-template-columns:1fr 1fr; gap:10px; align-items:center; border:1px solid var(--border); background:var(--surface-2); border-radius:14px; padding:11px 12px;}
 @media (max-width:480px){ .match-row{grid-template-columns:1fr;} }
