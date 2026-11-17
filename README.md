@@ -8,26 +8,19 @@ The project is a static web application built with HTML, CSS, and JavaScript. It
 
 The current edition introduces the **STM32F429 camera practice with FreeRTOS**, for a learner with no prior knowledge who needs to explain the application orally.
 
-It contains **60 questions across twelve topics**:
+It contains **20 questions across five topics**:
 
-1. System purpose and hardware
-2. Startup and camera initialization
-3. Tasks and responsibilities
-4. Bluetooth reception and command parsing
-5. Commands and operating modes
-6. Message queues
-7. DCMI and DMA capture
-8. Interrupts and notifications
-9. Semaphore synchronization
-10. Image buffers and memory
-11. Display composition and error feedback
-12. End-to-end explanation and oral practice
+1. System and main task responsibilities
+2. Bluetooth commands, including the direct ESTADO path
+3. Successful captures, callback errors, and timeouts
+4. Queues, task waits, and semaphore synchronization
+5. Image buffers and the complete end-to-end flow
 
 The bank is based exclusively on the supplied `main (2).c` and `OV7670_LIB (1).c`. Each question identifies the relevant function or section. The source files are not redistributed. Explanations use plain Spanish and introduce technical names through their purpose, rather than requiring register memorization.
 
 Important distinctions are preserved: Bluetooth parses text while Camera executes commands; ESTADO is answered directly; the display semaphore releases IMG1 after copying, before screen drawing; STOP is queued rather than an immediate capture abort; and an error callback can also signal the frame semaphore.
 
-The questions combine concepts, real-world scenarios, matching activities, diagram completion, model-answer prompts, and grouped exercises.
+The reduced bank prioritizes simple concepts, matching activities, short flow diagrams, and model answers for oral practice.
 
 > The active subject changes over time. This README describes the simulator as a reusable project and documents the exam currently loaded in `js/preguntas.js`.
 
@@ -35,11 +28,7 @@ The questions combine concepts, real-world scenarios, matching activities, diagr
 
 - Multiple choice
 - True or false
-- Grouped true or false with eight statements
-- Fill in the blank
-- Grouped fill in the blank with eight phrases and a word bank
 - Matching with dropdown lists
-- Connecting related concepts
 - Diagram completion
 - Open questions with a model answer and self-assessment
 

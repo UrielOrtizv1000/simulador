@@ -2,13 +2,13 @@ const fs=require('fs'),path=require('path'),vm=require('vm');
 const bankPath=path.join(__dirname,'..','js','preguntas.js'),source=fs.readFileSync(bankPath,'utf8'),context={};
 vm.createContext(context);vm.runInContext(source,context,{filename:bankPath});
 const {TOPICS,QUESTION_BANK}=context;function assert(ok,msg){if(!ok)throw new Error(msg);}
-assert(Array.isArray(TOPICS)&&TOPICS.length===12,'Se esperaban 12 temas');
-assert(Array.isArray(QUESTION_BANK)&&QUESTION_BANK.length===60,'Se esperaban 60 preguntas');
-const expectedTopics=['sistema','inicio','tareas','bluetooth','comandos','colas','captura','interrupciones','semaforos','buffers','pantalla','exposicion'];
+assert(Array.isArray(TOPICS)&&TOPICS.length===5,'Se esperaban 5 temas');
+assert(Array.isArray(QUESTION_BANK)&&QUESTION_BANK.length===20,'Se esperaban 20 preguntas');
+const expectedTopics=['sistema','comandos','captura','sincronizacion','imagen'];
 assert(TOPICS.every((t,i)=>t.id===expectedTopics[i]),'Unexpected camera practice topics');
 const topicIds=new Set(TOPICS.map(t=>t.id)),ids=new Set(),counts=new Map(TOPICS.map(t=>[t.id,0])),types={};
 const supported=new Set(['mc','vf','fill','match','connect','diagram','open','vf_group','fill_group']);
-assert(topicIds.size===12,'IDs de tema duplicados');
+assert(topicIds.size===5,'IDs de tema duplicados');
 for(const q of QUESTION_BANK){
  assert(!ids.has(q.id),`ID duplicado: ${q.id}`);ids.add(q.id);assert(topicIds.has(q.topic),`Tema inválido: ${q.id}`);assert(supported.has(q.type),`Tipo inválido: ${q.id}`);
  assert(q.prompt&&q.explain,`Falta texto o explicación: ${q.id}`);assert(q.source&&['main (2).c','OV7670_LIB (1).c'].includes(q.source.file)&&q.source.section,`Fuente inválida: ${q.id}`);
@@ -27,9 +27,8 @@ for(const q of QUESTION_BANK){
   assert(new Set(q.items.map(i=>i.answer)).size===8,`${q.id}: cada término debe usarse una vez`);
  }
 }
-for(const [topic,count] of counts)assert(count===5,`${topic}: se esperaban 5 preguntas y hay ${count}`);
-assert(types.vf_group>=2&&types.fill_group>=2,'Faltan dos bloques agrupados de cada tipo');
-assert(types.open>=2&&types.diagram>=2&&types.match>=2,'Faltan formatos solicitados');
+for(const [topic,count] of counts)assert(count===4,`${topic}: se esperaban 4 preguntas y hay ${count}`);
+assert(types.open>=3&&types.diagram>=2&&types.match>=2,'Faltan formatos de explicación y flujo');
 assert(!/seguridadredes\.md|IPsec|Kerberos|Criptografía|Programación Python/i.test(source),'Todavía existe contenido del banco anterior de Python');
 for(const q of QUESTION_BANK){
  if(q.type==='mc')assert(new Set(q.options).size===4,`${q.id}: duplicate options`);
@@ -42,9 +41,9 @@ for(const q of QUESTION_BANK){
   assert(q.slots.every(s=>s.label&&q.pool.includes(s.correct)),`${q.id}: invalid diagram answer`);
  }
 }
-for(const type of supported)assert(types[type]>0,`Missing question type: ${type}`);
+for(const type of ['mc','vf','match','diagram','open'])assert(types[type]>0,`Missing question type: ${type}`);
 const index=fs.readFileSync(path.join(__dirname,'..','index.html'),'utf8');
 assert(index.includes('Cámara y FreeRTOS desde cero'),'Outdated landing title');
-assert(index.includes('camara-freertos-1'),'Outdated bank cache key');
-assert(index.includes('>60</div>')&&index.includes('>12</div>'),'Outdated displayed totals');
+assert(index.includes('camara-freertos-2'),'Outdated bank cache key');
+assert(index.includes('>20</div>')&&index.includes('>5</div>'),'Outdated displayed totals');
 console.log(`Validated ${QUESTION_BANK.length} questions across ${TOPICS.length} topics.`,types);
