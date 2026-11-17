@@ -13,8 +13,8 @@ existing type needs no change to the logic at all.
 2. Follow the shape of the type you are writing — `answer` for `vf`, `answers` for
    `fill`, `pairs` for `connect` and `match`, `options` plus `answerIndex` for `mc`,
    `slots` plus `pool` for `diagram`. The README documents each one with an example.
-   This edition uses `vf`, `fill`, `connect` and `open`; the engine still renders
-   the others if you add one.
+   The camera edition uses all nine supported types, including grouped
+   true/false and fill exercises with eight items each.
 3. Keep the answer inside the question. A distractor is fine; a second correct
    option is not, and neither is a `connect` pair whose two halves do not match.
 4. Add a `source` object with the exact source filename and section. Do not add

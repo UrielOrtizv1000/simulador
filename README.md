@@ -6,24 +6,26 @@ The project is a static web application built with HTML, CSS, and JavaScript. It
 
 ## Current exam
 
-The current edition is a practical and conceptual exam for **Network Security**, focused on the second partial exam.
+The current edition introduces the **STM32F429 camera practice with FreeRTOS**, for a learner with no prior knowledge who needs to explain the application orally.
 
 It contains **60 questions across twelve topics**:
 
-1. Network security, CIA, and defense in depth
-2. Secure channels, protocols, and OSI layers
-3. IPv4, IPv6, TCP, and UDP
-4. Tunnels, encapsulation, and VPNs
-5. IPsec, ESP, AH, and operating modes
-6. TLS, HTTPS, and SSH
-7. Kerberos, certificates, and certificate authorities
-8. Steganography and steganalysis
-9. Cryptography, cryptanalysis, and communication attacks
-10. Symmetric, asymmetric, and hybrid encryption
-11. Block encryption, stream encryption, and XOR
-12. Hashes, validation, and electronic signatures
+1. System purpose and hardware
+2. Startup and camera initialization
+3. Tasks and responsibilities
+4. Bluetooth reception and command parsing
+5. Commands and operating modes
+6. Message queues
+7. DCMI and DMA capture
+8. Interrupts and notifications
+9. Semaphore synchronization
+10. Image buffers and memory
+11. Display composition and error feedback
+12. End-to-end explanation and oral practice
 
-The bank is based exclusively on `seguridadredes.md`. It does not include topics from previous editions or information added from external sources.
+The bank is based exclusively on the supplied `main (2).c` and `OV7670_LIB (1).c`. Each question identifies the relevant function or section. The source files are not redistributed. Explanations use plain Spanish and introduce technical names through their purpose, rather than requiring register memorization.
+
+Important distinctions are preserved: Bluetooth parses text while Camera executes commands; ESTADO is answered directly; the display semaphore releases IMG1 after copying, before screen drawing; STOP is queued rather than an immediate capture abort; and an error callback can also signal the frame semaphore.
 
 The questions combine concepts, real-world scenarios, matching activities, diagram completion, model-answer prompts, and grouped exercises.
 
