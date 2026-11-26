@@ -6,21 +6,16 @@ The project is a static web application built with HTML, CSS, and JavaScript. It
 
 ## Current exam
 
-The current edition introduces the **STM32F429 camera practice with FreeRTOS**, for a learner with no prior knowledge who needs to explain the application orally.
+The current edition covers **transportation, transshipment, assignment, and the MODI method** using only the questions supplied for the active review.
 
-It contains **20 questions across five topics**:
+It contains **16 questions across four topics**:
 
-1. System and main task responsibilities
-2. Bluetooth commands, including the direct ESTADO path
-3. Successful captures, callback errors, and timeouts
-4. Queues, task waits, and semaphore synchronization
-5. Image buffers and the complete end-to-end flow
+1. Fundamental network and model concepts
+2. Transportation, transshipment, and assignment models
+3. Balance, transportation bases, and degeneracy
+4. Adjustment cycles and MODI optimality
 
-The bank is based exclusively on the supplied `main (2).c` and `OV7670_LIB (1).c`. Each question identifies the relevant function or section. The source files are not redistributed. Explanations use plain Spanish and introduce technical names through their purpose, rather than requiring register memorization.
-
-Important distinctions are preserved: Bluetooth parses text while Camera executes commands; ESTADO is answered directly; the display semaphore releases IMG1 after copying, before screen drawing; STOP is queued rather than an immediate capture abort; and an error callback can also signal the frame semaphore.
-
-The reduced bank prioritizes simple concepts, matching activities, short flow diagrams, and model answers for oral practice.
+The bank is based exclusively on the three supplied images: six short-answer questions with their provided answers and ten final self-assessment questions. The first exercise remains one grouped true/false question with five statements. Open questions include concise model answers for direct study.
 
 > The active subject changes over time. This README describes the simulator as a reusable project and documents the exam currently loaded in `js/preguntas.js`.
 

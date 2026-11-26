@@ -254,7 +254,9 @@ function renderQuestion(){
   card.classList.add('rise-in');
 
   var t = topicOf(q.topic);
-  var typeLabels = {mc:'Opción múltiple', vf:'Verdadero / Falso', vf_group:'Verdadero / Falso · 8 incisos', fill:'Completar', fill_group:'Completar · 8 incisos', match:'Relacionar', open:'Pregunta abierta', diagram:'Diagrama', connect:'Conectar'};
+  var typeLabels = {mc:'Opción múltiple', vf:'Verdadero / Falso', fill:'Completar', match:'Relacionar', open:'Pregunta abierta', diagram:'Diagrama', connect:'Conectar'};
+  if(q.type==='vf_group') typeLabels.vf_group='Verdadero / Falso · '+q.statements.length+' incisos';
+  if(q.type==='fill_group') typeLabels.fill_group='Completar · '+q.items.length+' incisos';
 
   card.appendChild(el('div',{class:'qmeta'},[
     el('span',{class:'qtag', style:'background:color-mix(in srgb, var('+t.color+') 18%, transparent); color:var('+t.color+')', text:t.short}),
